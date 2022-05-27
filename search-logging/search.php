@@ -42,11 +42,11 @@
 
                             fwrite($qfile, "import pyterrier as pt\nif not pt.started():\n\tpt.init()\n\n");
                             fwrite($qfile, "import pandas as pd\nqueries = pd.DataFrame([[\"q1\", \"$search_string\"]], columns=[\"qid\",\"query\"])\n");
-                            fwrite($qfile, "index = pt.IndexFactory.of(\"./uw_index/\")\n");
+                            fwrite($qfile, "index = pt.IndexFactory.of(\"./reddit_index/\")\n");
                             fwrite($qfile, "tf_idf = pt.BatchRetrieve(index, wmodel=\"TF_IDF\")\n");
 
                             for ($i=0; $i<5; $i++) {
-                                    fwrite($qfile, "print(index.getMetaIndex().getItem(\"filename\",tf_idf.transform(queries).docid[$i]))\n");
+                                    fwrite($qfile, "print(index.getMetaIndex().getItem(\"filename\",tf_idf.transform(queries).docid[$i])[:-10])\n");
                                     fwrite($qfile, "print(index.getMetaIndex().getItem(\"title\",tf_idf.transform(queries).docid[$i]))\n");
                             }
 
@@ -60,7 +60,7 @@
                             $line=fgets($stream);
 
                             while(($line=fgets($stream))!=false) {
-                                    $clean_line = preg_replace('/\s+/',',',$line);
+                                    $clean_line = preg_replace('/\s+/','',$line);
                                     $record = explode("./", $clean_line);
                                     $line = fgets($stream);
                                     echo "<a href=\"http://$record[1]\">".$line."</a><br/>\n";
